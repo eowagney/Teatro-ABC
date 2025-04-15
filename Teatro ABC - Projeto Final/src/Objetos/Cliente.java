@@ -1,3 +1,4 @@
+package Objetos;
 public class Cliente {
 
     // nome, CPF, telefone, endereço e data de nascimento.
