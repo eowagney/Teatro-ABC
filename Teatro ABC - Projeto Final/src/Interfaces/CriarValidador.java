@@ -2,5 +2,5 @@ package Interfaces;
 
 public interface CriarValidador {
 
-	void validar();
+	boolean validar(String dado);
 }

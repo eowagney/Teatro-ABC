@@ -1,4 +1,5 @@
 package Execultaveis;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,181 +24,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import Objetos.Cliente;
+import Objetos.ReservarIngresso;
+import Objetos.SalvarContas;
+import Objetos.VerificarCPF;
+import Objetos.VerificarLogin;
+import Objetos.ValidadorCpf;
+
 public class Gerenciador{
 
-    //Método para verificar o login do usuário retornando uma boolean
-    public static boolean contaCadastrada(String cpf1, String nascimento1, String arquivoContas) {
-            try (FileReader fr = new FileReader(arquivoContas)) {
-                BufferedReader br = new BufferedReader(fr);
-                String linha;
-                while ((linha = br.readLine()) != null){
-                    String[] dados = linha.split(" - ");
-                    if (dados.length == 5) { // Verifica se a linha CPF e data de nascimento.
-                        String cpf = dados[1];
-                        String nascimento = dados[4];
-                        
-                        //verificando no arquivo se esta cadastrada
-                        if(cpf.equals(cpf1) && nascimento.equals(nascimento1)){
-                            return true;
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return false;   
-        }
-    //Método para verificar se o cpf já está cadastrado no sistema
-    public static boolean cpfCadastrado(String cpf1, String arquivoContas) {
-        try (FileReader fr = new FileReader(arquivoContas)) {
-            BufferedReader br = new BufferedReader(fr);
-            String linha;
-            while ((linha = br.readLine()) != null){
-                String[] dados = linha.split(" - ");
-                if (dados.length == 5) { // Verifica se a linha tem nome, CPF, telefone, endereço e data de nascimento.
-                    String cpf = dados[1];
-
-                    if(cpf.equals(cpf1)){
-                        return true;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;   
-    }
-        // Método para salvar os conta no arquivo
-        public static void salvarConta(ArrayList<Cliente> dadosClientes, String arquivoContas) {
-            File arquivo = new File(arquivoContas);
-            // Lista para armazenar o conteúdo do arquivo
-            ArrayList<String> conteudoArquivo = new ArrayList<>();
-             try {
-                // Ler o conteúdo do arquivo existente
-                if (arquivo.exists()) {
-                    try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
-                        String linha;
-                        while ((linha = br.readLine()) != null) {
-                            conteudoArquivo.add(linha); // Adiciona cada linha ao ArrayList
-                        }
-                    }
-                }
-                // Preencher linhas vazias com os dados dos clientes
-                int clienteIndex = 0; // Índice para acessar os clientes
-                for (int i = 0; i < conteudoArquivo.size(); i++) {
-                    if (conteudoArquivo.get(i).trim().isEmpty() && clienteIndex < dadosClientes.size()) {
-                        conteudoArquivo.set(i, dadosClientes.get(clienteIndex).toString());
-                        clienteIndex++; // Avança para o próximo cliente
-                    }
-                }
-                // Adicionar qualquer cliente restante no final do arquivo
-                while (clienteIndex < dadosClientes.size()) {
-                    conteudoArquivo.add(dadosClientes.get(clienteIndex).toString());
-                    clienteIndex++;
-                }
-                // Escrever o conteúdo atualizado de volta no arquivo
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
-                    for (String linha : conteudoArquivo) {
-                        bw.write(linha);
-                        bw.newLine();
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-            //VALIDACAO DE CPF
-            public static boolean validarCpf(String cpf2){
-            long cpf = Long.parseLong(cpf2);
-           
-            //separando o cpf por unidade
-            long cpf1 = cpf / 100, verificacao, digito1, digito2, soma = 0, divisao = 100000000, peso = 1;   
-             
-             //fazendo o calculo de verificacao para o achar o primeiro digito
-             for(int i = 0; i < 9; i++){             
-                 soma = soma + (cpf1 / divisao) * peso;
-                 cpf1 = cpf1 % divisao;
-                 divisao = divisao / 10; 
-                 peso++;
-             }
-             //atualizando as variaveis
-             digito1 = (soma % 11) % 10;
-             cpf1 = cpf / 100;
-             divisao = 100000000;
-             soma = 0;
-             peso = 0;
-             
-             // calculo para achar o segundo digito
-               for(int i = 0; i < 9; i++){               
-                 soma = soma + (cpf1 / divisao) * peso;
-                 cpf1 = cpf1 % divisao;
-                 divisao = divisao / 10;            
-                 peso++;
-             }
-            
-            //juntando todos os numeros separados junto com os dois digitos
-           soma = soma + digito1 * 9;  
-           digito2 = (soma % 11) % 10;
-           cpf = cpf % 100;
-           verificacao = digito1*10+digito2;
-           
-           //verificando se o cpf e valido
-           if(verificacao == cpf){
-            return true;
-           }else{            
-            return false;
-           }   
-        }
-        // metodo para reservar poltrona 
-        public static boolean reservarPoltrona(String palavra1, String aquivo) {
-    
-            // Caminho do arquivo temporário
-            String arquivoTemporario = "temp.txt";
-
-            // simpulo para poltroa ocupada
-            String palavra2 = "[X]";
-
-             // Variável para rastrear se houve substituição
-             boolean substituido = false;
-    
-            try (
-                FileReader fr = new FileReader(aquivo);
-                BufferedReader br = new BufferedReader(fr);
-                FileWriter fw = new FileWriter(arquivoTemporario);
-                BufferedWriter bw = new BufferedWriter(fw)
-            ) {
-                String linha;
-    
-                // Lê o arquivo linha por linha
-                while ((linha = br.readLine()) != null) {
-                    // Divide a linha em palavras
-                    String[] palavras = linha.split(" ");
-    
-                    // Substitui as palavras
-                    for (int i = 0; i < palavras.length; i++) {
-                        if (palavras[i].equals(palavra1)) {
-                            palavras[i] = palavra2;
-                            substituido = true; // Marca como substituído
-                        }
-                    }
-                    // Escreve a linha modificada no arquivo temporário
-                    bw.write(String.join(" ", palavras));
-                    bw.newLine();
-                }
-            } catch (IOException e) {
-                System.out.println("Erro ao processar o arquivo: " + e.getMessage());
-            }
-    
-            // Substitui o arquivo original pelo temporário
-            File arquivo = new File(aquivo);
-            File temp = new File(arquivoTemporario);
-    
-            if (arquivo.delete()) {
-                temp.renameTo(arquivo);
-            }
-            return substituido; // Retorna true se a substituição ocorreu, caso contrário, false
-        }
-        // Método para salvar os ingressos no arquivo
         public static void salvarIngresso(String cpf, String peca, String sessao, String area, String poltrona, String valor) {
             String nomeArquivo = "ingressos.txt";
             List<String> linhas = new ArrayList<>();
@@ -499,6 +334,10 @@ public class Gerenciador{
                     System.err.println("Erro ao ler o arquivo de estatísticas: " + e.getMessage());
                 }
             }
+            
+            
+            
+            /*----------------------------------------CLASSE MAIN-------------------------------------------------*/
                 public static void main(String[] args) throws Exception {
                     JFrame telaInicial = new JFrame("Teatro ABC");
 
@@ -559,25 +398,23 @@ public class Gerenciador{
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     try {
-                                        // Obter os valores de nome, CPF, telefone, endereço e data de nascimento.
                                         String nome = campoNome.getText();
                                         String cpf = campoCpf.getText();
                                         String telefone = campoTelefone.getText();
                                         String endereco = campoEndereco.getText();
                                         String nascimento = campoNacimento.getText();
 
-                                        if(validarCpf(cpf) && !cpfCadastrado(cpf, arquivoContas)){
+                                        ValidadorCpf valida = new ValidadorCpf();
+                                        VerificarCPF verificar = new VerificarCPF();
+                                        if(valida.validar(cpf) && !verificar.lerArquivo(cpf, arquivoContas, null)){
 
-                                        // Criar uma nova instância de Contato
                                         Cliente novoCliente = new Cliente(nome , cpf, telefone, endereco, nascimento);
-
-                                        //adicionando 
+                                        SalvarContas conta = new SalvarContas();
+                                        
                                         dadosContass.add(novoCliente);
 
-                                        // Salva a nova conta no arquivo em modo de anexo
-                                       salvarConta(dadosContass, arquivoContas);
+                                       conta.salvar(dadosContass, arquivoContas);
 
-                                        // Limpar os campos de texto
                                         campoNome.setText("");
                                         campoCpf.setText("");
                                         campoTelefone.setText("");
@@ -586,9 +423,9 @@ public class Gerenciador{
 
                                         telaCadastro.dispose();
                                         }else{
-                                            if(!validarCpf(cpf)){
+                                            if(!valida.validar(cpf)){
                                             JOptionPane.showMessageDialog(telaCadastro, "CPF Inválido");
-                                            }else if(cpfCadastrado(cpf, arquivoContas)){
+                                            }else if(verificar.lerArquivo(cpf, arquivoContas, null)){
                                             JOptionPane.showMessageDialog(telaCadastro, "CPF Já Cadastrado");
                                             }
                                             campoCpf.setText("");
@@ -645,46 +482,33 @@ public class Gerenciador{
                         JTextField campoNacimento = new JTextField();
                         campoNacimento.setBounds(10, 100, 100, 20);
             
-                       // Criando botão de Confirmar
                     JButton confirmar = new JButton("CONFIRMAR");
             
-                    // Editando o botão
                     confirmar.setVisible(true);
                     confirmar.setBounds(70, 150, 150, 40);
                     confirmar.setFocusPainted(false);
             
-                    // Adicionando um ouvinte de evento (ActionListener) ao botão
                     confirmar.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-            
-                                // Obter os valores de cpf e nascimento
-                                String cpf1 = campoCpf.getText();
-                                String nascimento1 = campoNacimento.getText();
-                                contaCadastrada(cpf1, nascimento1, arquivoContas);
+                        	
+                        	VerificarLogin validarLogin = new VerificarLogin();
+                            String cpf1 = campoCpf.getText();
+                            String nascimento1 = campoNacimento.getText();
 
-                         if (contaCadastrada(cpf1, nascimento1, arquivoContas)) {
+                         if (validarLogin.lerArquivo(cpf1, nascimento1, arquivoContas)) {
                         telaLogin.dispose();
                         telaInicial.dispose();
 
                         JFrame  telaUsuario = new JFrame("Tela Usuário");
                         telaUsuario.setLayout(null);
 
-                        //botão de compra
                         JButton compra = new JButton("COMPRAR INGRESSO");
             
-                            // Editando o botão
                             compra.setVisible(true);
                             compra.setBounds(60, 50, 160, 40);
                             compra.setFocusPainted(false);
             
-                            //JOAO GABRIEL   //JOAO GABRIEL   //JOAO GABRIEL
-                            //JOAO GABRIEL   //JOAO GABRIEL   //JOAO GABRIEL
-                            //JOAO GABRIEL   //JOAO GABRIEL   //JOAO GABRIEL
-                            //JOAO GABRIEL   //JOAO GABRIEL   //JOAO GABRIEL
-                            //JOAO GABRIEL   //JOAO GABRIEL   //JOAO GABRIEL
-
-                            // Adicionando um ouvinte de evento (ActionListener) ao botão
                             compra.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -805,10 +629,11 @@ public class Gerenciador{
                                                 valor = 250.0;
                                             }
 
+                                            ReservarIngresso ingresso = new ReservarIngresso();
                                             String valorString = String.valueOf(valor);
 
                                             if(pecaSelecionada.equals("PEÇA 01") && sessaoSelecionada.equals("MANHÃ")){        
-                                                if(reservarPoltrona(poltronaTexto, "Peca1Manha.txt")){                                                       
+                                                if(ingresso.reservar(poltronaTexto, "Peca1Manha.txt")){                                                       
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -818,7 +643,7 @@ public class Gerenciador{
                                                 JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                             }
                                             }else if(pecaSelecionada.equals("PEÇA 01") && sessaoSelecionada.equals("TARDE")){                                            
-                                                if(reservarPoltrona(poltronaTexto, "Peca1Tarde.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca1Tarde.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -827,7 +652,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 01") && sessaoSelecionada.equals("NOITE")){                                                
-                                                if(reservarPoltrona(poltronaTexto, "Peca1Noite.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca1Noite.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -836,7 +661,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 02") && sessaoSelecionada.equals("MANHÃ")){                     
-                                                if(reservarPoltrona(poltronaTexto, "Peca2Manha.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca2Manha.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -846,7 +671,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 02") && sessaoSelecionada.equals("TARDE")){                      
-                                                if(reservarPoltrona(poltronaTexto, "Peca2Tarde.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca2Tarde.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -855,7 +680,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 02") && sessaoSelecionada.equals("NOITE")){                   
-                                                if(reservarPoltrona(poltronaTexto, "Peca2Noite.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca2Noite.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -864,7 +689,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 03") && sessaoSelecionada.equals("MANHÃ")){                    
-                                                if(reservarPoltrona(poltronaTexto, "Peca3Manha.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca3Manha.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -873,7 +698,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 03") && sessaoSelecionada.equals("TARDE")){                  
-                                                if(reservarPoltrona(poltronaTexto, "Peca3Tarde.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca3Tarde.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
@@ -882,7 +707,7 @@ public class Gerenciador{
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona ocupada, por favor escolha outro assento.");
                                                 }
                                             }else if(pecaSelecionada.equals("PEÇA 03") && sessaoSelecionada.equals("NOITE")){                                              
-                                                if(reservarPoltrona(poltronaTexto, "Peca3Noite.txt")){
+                                                if(ingresso.reservar(poltronaTexto, "Peca3Noite.txt")){
                                                     JOptionPane.showMessageDialog(comprandoIngresso, "Poltrona Adicionada!" + "\nPeça: " + 
                                                     pecaSelecionada + "\nSessão: " + sessaoSelecionada + "\nÁrea: " + areaSelecionada + "\nPoltrona: " + poltrona + "\nValor da Poltrona: " + valor);
                                                     poltronas.setText("");                                              
