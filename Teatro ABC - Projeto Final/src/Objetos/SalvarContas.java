@@ -8,9 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import Interfaces.CriarSalvar;
+import Interfaces.CriarSalvarCnt;
 
-public class SalvarContas implements CriarSalvar {
+public class SalvarContas implements CriarSalvarCnt {
 
 	@Override
 	public boolean salvar(ArrayList<Cliente> dadosClientes, String arquivoContas) {

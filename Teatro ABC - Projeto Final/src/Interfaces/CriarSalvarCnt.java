@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import Objetos.Cliente;
 
-public interface CriarSalvar {
+public interface CriarSalvarCnt {
 
 	boolean salvar(ArrayList<Cliente> dadosClientes, String arquivoContas);
 }

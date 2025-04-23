@@ -1,2 +1,3 @@
 
 CPF: 71522984160 | Peça: PEÇA 01 | Sessão: MANHÃ | Área: PLATEIA B | Valor Total: 60.0 | Poltronas: 27 
+CPF: 70786469161 | Peça: PEÇA 02 | Sessão: MANHÃ | Área: PLATEIA A | Valor Total: 80.0 | Poltronas: 1, 2
