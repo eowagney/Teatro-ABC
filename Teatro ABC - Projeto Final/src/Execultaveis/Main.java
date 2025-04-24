@@ -1,57 +1,21 @@
 package Execultaveis;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import Objetos.Cliente;
-import Objetos.ImprimirEstatisticas;
-import Objetos.ImprimirIngresso;
-import Objetos.ReservarIngresso;
-import Objetos.SalvarContas;
-import Objetos.SalvarIngressos;
-import Objetos.VerificarCPF;
-import Objetos.VerificarLogin;
-import Objetos.ValidadorCpf;
+import InterfacesGraficas.LoginTela;
 
 
-
-public class Gerenciador{
+public class Main{
 	
          
                 public static void main(String[] args) throws Exception {
-                    JFrame telaInicial = new JFrame("Teatro ABC");
+                	
+                	LoginTela telaInicial = new LoginTela();
 
-                    ImageIcon logoImg = new ImageIcon("logolonga.png"); // Carregar a imagem
-                    JLabel logoImgLabel = new JLabel(logoImg);
-                    logoImgLabel.setBounds(-100, -40, 700, 350); // Definir posição e tamanho da JLabel
-                    telaInicial.add(logoImgLabel);
-                    telaInicial.setLocationRelativeTo(null);
-                    telaInicial.add(logoImgLabel);
+                	// String arquivoContas = "arquivoContas.txt";
             
-                    //arquivos
-                    String arquivoContas = "arquivoContas.txt";
-            
-                     // Criando um array list
-                    ArrayList<Cliente> dadosContass = new ArrayList<Cliente>();
+                    //ArrayList<Cliente> dadosContass = new ArrayList<Cliente>();
 
-                     //criando butoes 
-                    JButton cadastroUsuario = new JButton("CADASTRAR USUÁRIO");  ///////////////////////
-                    cadastroUsuario.setBounds(130, 280, 230, 40);
-                    cadastroUsuario.setFocusPainted(false);
-                    cadastroUsuario.addActionListener(new ActionListener(){
-                            @Override
-                            public void actionPerformed (ActionEvent e){
-                                JFrame telaCadastro = new JFrame("Tela de Cadastro");
+                   
+                                /*JFrame telaCadastro = new JFrame("Tela de Cadastro");
 
                                 //adicionado textfield e button
                                 JLabel nome = new JLabel("NOME");
@@ -152,8 +116,7 @@ public class Gerenciador{
                                 telaCadastro.setLayout(null);
                                 telaCadastro.setVisible(true);
                                 telaCadastro.setLocationRelativeTo(null);
-                            }
-                        });
+                            
             
                         JButton fazerLogin = new JButton("FAZER LOGIN");  /////////////////////////
                         fazerLogin.setBounds(130, 350, 230, 40);
@@ -500,29 +463,7 @@ public class Gerenciador{
                     }
                         }});
 
-            //Adicionar a tela
-            telaLogin.add(cpf);
-            telaLogin.add(campoCpf);
-            telaLogin.add(nascimento);
-            telaLogin.add(campoNacimento);
-            telaLogin.add(confirmar);
-
-            //editando a janela de cadastro
-            telaLogin.setSize(300, 250);
-            telaLogin.setLayout(null);
-            telaLogin.setVisible(true);
-            telaLogin.setLocationRelativeTo(null);
-        }
-    });
-        //Adicionar a tela
-        telaInicial.add(cadastroUsuario);
-        telaInicial.add(fazerLogin);
-
-        //editando a janela principal
-        telaInicial.setSize(500, 500);
-        telaInicial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        telaInicial.setLayout(null);
-        telaInicial.setVisible(true);
-        telaInicial.setLocationRelativeTo(null);
-    }
-    }
+                            }*/
+                        }
+                }
+        
