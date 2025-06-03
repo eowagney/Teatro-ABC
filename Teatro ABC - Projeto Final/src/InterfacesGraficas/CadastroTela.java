@@ -7,21 +7,24 @@ public class CadastroTela extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-
     public CadastroTela() {
         setTitle("Cadastro de Usuário");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        JPanel painel = new JPanel();
-        painel.setBackground(new Color(100, 245, 245));
-        setLayout(new BorderLayout());
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
+        // Criar painel principal com BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(245, 245, 245));
 
+        // Criar painel central com tamanho máximo limitado
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.setBackground(new Color(245, 245, 245));
+        painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        painel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE)); // Limitar largura máxima
+        
         JLabel titulo = new JLabel("Cadastro");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,7 +64,18 @@ public class CadastroTela extends JFrame {
             this.dispose();
         });
 
-        add(painel);
+        // Criar painéis para centralização
+        JPanel westFiller = new JPanel();
+        JPanel eastFiller = new JPanel();
+        westFiller.setBackground(new Color(245, 245, 245));
+        eastFiller.setBackground(new Color(245, 245, 245));
+        
+        // Adicionar os componentes ao painel principal
+        mainPanel.add(westFiller, BorderLayout.WEST);
+        mainPanel.add(painel, BorderLayout.CENTER);
+        mainPanel.add(eastFiller, BorderLayout.EAST);
+
+        add(mainPanel);
         setVisible(true);
     }
 
@@ -69,14 +83,16 @@ public class CadastroTela extends JFrame {
         JPanel subPainel = new JPanel();
         subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
         subPainel.setBackground(new Color(245, 245, 245));
+        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JTextField campo = new JTextField();
-        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        campo.setMaximumSize(new Dimension(350, 30));
+        campo.setPreferredSize(new Dimension(350, 30));
+        campo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         subPainel.add(label);
         subPainel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -92,14 +108,16 @@ public class CadastroTela extends JFrame {
         JPanel subPainel = new JPanel();
         subPainel.setLayout(new BoxLayout(subPainel, BoxLayout.Y_AXIS));
         subPainel.setBackground(new Color(245, 245, 245));
+        subPainel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPasswordField campo = new JPasswordField();
-        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        campo.setMaximumSize(new Dimension(350, 30));
+        campo.setPreferredSize(new Dimension(350, 30));
+        campo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         subPainel.add(label);
         subPainel.add(Box.createRigidArea(new Dimension(0, 5)));
