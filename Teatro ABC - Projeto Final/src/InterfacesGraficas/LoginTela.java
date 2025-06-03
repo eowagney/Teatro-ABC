@@ -1,7 +1,7 @@
 package InterfacesGraficas;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class LoginTela extends JFrame {
 
@@ -87,8 +87,9 @@ public class LoginTela extends JFrame {
         });
 
         botaoCadastro.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Tela de cadastro será aberta aqui 4444.");
             CadastroTela telaCadastro = new CadastroTela();
+            telaCadastro.setVisible(true);
+            LoginTela.this.dispose();
         });
 
         add(painel);
