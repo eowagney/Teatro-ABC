@@ -1,6 +1,7 @@
 package InterfacesGraficas;
 
 import java.awt.*;
+import java.text.ParseException;
 import javax.swing.*;
 
 public class LoginTela extends JFrame {
@@ -27,27 +28,34 @@ public class LoginTela extends JFrame {
         gbc.insets = new Insets(20, 10, 30, 10);
         painel.add(titulo, gbc);
 
-        JLabel usuarioLabel = new JLabel("Usuário:");
-        usuarioLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JLabel tituloUsuario = new JLabel("Usuário:");
+        tituloUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 10, 5, 10);
-        painel.add(usuarioLabel, gbc);
+        painel.add(tituloUsuario, gbc);
 
         JTextField campoUsuario = new JTextField(20);
         campoUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridy++;
         painel.add(campoUsuario, gbc);
 
-        JLabel senhaLabel = new JLabel("Senha:");
-        senhaLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JLabel tituloSenha = new JLabel("Senha:");
+        tituloSenha.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridy++;
-        painel.add(senhaLabel, gbc);
+        painel.add(tituloSenha, gbc);
 
         JPasswordField campoSenha = new JPasswordField(20);
         campoSenha.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridy++;
         painel.add(campoSenha, gbc);
+
+        JCheckBox mostrarSenha = new JCheckBox("Mostrar senha");
+        mostrarSenha.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        mostrarSenha.setBackground(new Color(245, 245, 245));
+        gbc.gridy++;
+        painel.add(mostrarSenha, gbc);
+        mostrarSenha.setFocusPainted(false);
 
         JButton botaoLogin = new JButton("Entrar");
         botaoLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -59,21 +67,29 @@ public class LoginTela extends JFrame {
         gbc.insets = new Insets(20, 10, 10, 10);
         painel.add(botaoLogin, gbc);
 
-        JButton botaoCadastro = new JButton("Cadastrar");
-        botaoCadastro.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        botaoCadastro.setBackground(new Color(76, 175, 80));
-        botaoCadastro.setForeground(Color.WHITE);
-        botaoCadastro.setFocusPainted(false);
-        botaoCadastro.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton botaoCadastrar = new JButton("Cadastrar");
+        botaoCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        botaoCadastrar.setBackground(new Color(76, 175, 80));
+        botaoCadastrar.setForeground(Color.WHITE);
+        botaoCadastrar.setFocusPainted(false);
+        botaoCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         gbc.gridy++;
         gbc.insets = new Insets(5, 10, 20, 10);
-        painel.add(botaoCadastro, gbc);
+        painel.add(botaoCadastrar, gbc);
 
-        JLabel erroLabel = new JLabel("Usuário ou senha inválidos.");
-        erroLabel.setForeground(Color.RED);
-        erroLabel.setVisible(false);
+        JLabel erroEntrar = new JLabel("Usuário ou senha inválidos.");
+        erroEntrar.setForeground(Color.RED);
+        erroEntrar.setVisible(false);
         gbc.gridy++;
-        painel.add(erroLabel, gbc);
+        painel.add(erroEntrar, gbc);
+
+        mostrarSenha.addActionListener(e -> {
+            if (mostrarSenha.isSelected()) {
+                campoSenha.setEchoChar((char) 0); // Mostrar a senha
+            } else {
+                campoSenha.setEchoChar('\u2022'); // Ocultar a senha (padrão: bullet •)
+            }
+        });
 
         botaoLogin.addActionListener(e -> {
             String usuario = campoUsuario.getText();
@@ -82,14 +98,20 @@ public class LoginTela extends JFrame {
             if (usuario.equals("admin") && senha.equals("1234")) {
                 JOptionPane.showMessageDialog(this, "Login bem-sucedido!");
             } else {
-                erroLabel.setVisible(true);
+                erroEntrar.setVisible(true);
             }
         });
 
-        botaoCadastro.addActionListener(e -> {
-            CadastroTela telaCadastro = new CadastroTela();
-            telaCadastro.setVisible(true);
-            LoginTela.this.dispose();
+        botaoCadastrar.addActionListener(e -> {
+            CadastroTela telaCadastro = null;
+            try {
+                telaCadastro = new CadastroTela();
+            } catch (ParseException ex) {
+            }
+            if (telaCadastro != null) {
+                telaCadastro.setVisible(true);
+                LoginTela.this.dispose();
+            }
         });
 
         add(painel);

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Execultaveis.Main",
+            "projectName": "Teatro ABC - Projeto Final"
+        },
+        {
+            "type": "java",
             "name": "Gerenciador",
             "request": "launch",
             "mainClass": "Gerenciador",
