@@ -85,9 +85,9 @@ public class LoginTela extends JFrame {
 
         mostrarSenha.addActionListener(e -> {
             if (mostrarSenha.isSelected()) {
-                campoSenha.setEchoChar((char) 0); // Mostrar a senha
+                campoSenha.setEchoChar((char) 0); 
             } else {
-                campoSenha.setEchoChar('\u2022'); // Ocultar a senha (padrão: bullet •)
+                campoSenha.setEchoChar('\u2022'); 
             }
         });
 
