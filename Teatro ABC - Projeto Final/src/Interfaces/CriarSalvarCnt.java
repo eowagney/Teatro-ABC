@@ -1,7 +1,8 @@
-package interfaces;
+package Interfaces;
+
+import java.util.ArrayList;
 
 import Objetos.Cliente;
-import java.util.ArrayList;
 
 public interface CriarSalvarCnt {
 

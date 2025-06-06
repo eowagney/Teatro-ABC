@@ -1,4 +1,4 @@
-package interfaces;
+package Interfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
