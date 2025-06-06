@@ -1,4 +1,4 @@
-package InterfacesGraficas;
+package view;
 
 import Validadores.ValidarCpf;
 import Validadores.ValidarEndereco;
@@ -12,11 +12,11 @@ import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-public class CadastroTela extends JFrame {
+public class TelaCadastro extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public CadastroTela() throws ParseException {
+    public TelaCadastro() throws ParseException {
         setTitle("Cadastro de Usuário");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -171,7 +171,7 @@ public class CadastroTela extends JFrame {
         });
 
         botaoVoltar.addActionListener(e -> {
-            LoginTela loginTela = new LoginTela();
+            TelaLogin loginTela = new TelaLogin();
             loginTela.setVisible(true);
             this.dispose();
         });

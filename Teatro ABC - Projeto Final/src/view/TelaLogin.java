@@ -1,14 +1,14 @@
-package InterfacesGraficas;
+package view;
 
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
 
-public class LoginTela extends JFrame {
+public class TelaLogin extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public LoginTela() {
+    public TelaLogin() {
         setTitle("Teatro ABC");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,14 +103,14 @@ public class LoginTela extends JFrame {
         });
 
         botaoCadastrar.addActionListener(e -> {
-            CadastroTela telaCadastro = null;
+            TelaCadastro telaCadastro = null;
             try {
-                telaCadastro = new CadastroTela();
+                telaCadastro = new TelaCadastro();
             } catch (ParseException ex) {
             }
             if (telaCadastro != null) {
                 telaCadastro.setVisible(true);
-                LoginTela.this.dispose();
+                TelaLogin.this.dispose();
             }
         });
 
