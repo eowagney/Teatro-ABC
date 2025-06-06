@@ -219,4 +219,3 @@ public class CadastroTela extends JFrame {
         botao.setPreferredSize(new Dimension(120, 35));
     }
 }
- 
