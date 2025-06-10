@@ -1,5 +1,6 @@
 package view;
 
+import controller.UsuarioController;
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
@@ -95,8 +96,16 @@ public class TelaLogin extends JFrame {
             String usuario = campoUsuario.getText();
             String senha = new String(campoSenha.getPassword());
 
-            if (usuario.equals("admin") && senha.equals("1234")) {
-                JOptionPane.showMessageDialog(this, "Login bem-sucedido!");
+            UsuarioController usuarioController = new UsuarioController();
+            
+            if (usuarioController.autenticar(usuario, senha)) {
+                TelaUsuario telaUsuario = new TelaUsuario(usuario);
+                TelaLogin.this.dispose();
+                telaUsuario.setVisible(true);
+            }else if(usuario.equals("admin") && senha.equals("admin")) {
+                TelaAdmin telaAdmin = new TelaAdmin();
+               telaAdmin.setVisible(true);
+                TelaLogin.this.dispose();
             } else {
                 erroEntrar.setVisible(true);
             }

@@ -7,6 +7,8 @@ import Validadores.ValidarNome;
 import Validadores.ValidarSenha;
 import Validadores.ValidarTelefone;
 import Validadores.ValidarUsuario;
+import dao.UsuarioDAO;
+import entity.Usuario;
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
@@ -165,8 +167,32 @@ public class TelaCadastro extends JFrame {
                 campoSenha.setText("");
                 campoSenha.requestFocus();
             } else {
-                // Todos os campos são válidos.
-                // Aqui você pode adicionar o código para salvar o usuário no banco de dados.
+                Usuario u = new Usuario();
+                u.setNome(campoNome.getText());
+                u.setCpf(campoCPF.getText());
+                u.setTelefone(campoTelefone.getText());
+                u.setEndereco(campoEndereco.getText());
+                u.setNascimento(campoNascimento.getText());
+                u.setLogin(campoUsuario.getText());
+                u.setSenha(senhaStr);
+
+                boolean sucesso = new UsuarioDAO().cadastrarUsuario(
+                    u.getNome(),
+                    u.getCpf(),
+                    u.getTelefone(),
+                    u.getEndereco(),
+                    u.getNascimento(),
+                    u.getLogin(),
+                    u.getSenha()
+                );
+
+                if (sucesso) {
+                    this.dispose(); 
+
+                    new TelaLogin().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erro: CPF já cadastrado.", "Cadastro falhou", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
