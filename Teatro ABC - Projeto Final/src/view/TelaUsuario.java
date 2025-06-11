@@ -54,7 +54,7 @@ public class TelaUsuario extends JFrame {
         });
         
         botaoComprar.addActionListener(e -> {
-            
+            TelaReserva telaReserva = new TelaReserva(TelaUsuario.this);
             dispose();
         });
 

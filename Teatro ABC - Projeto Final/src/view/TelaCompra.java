@@ -1,6 +1,163 @@
-
 package view;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import javax.swing.*;
 
 public class TelaCompra {
 
+    private JFrame janelaPrincipal;
+    private String nomePeca;
+    private String nomeSessao;
+    private String nomeArea;
+    private List<Integer> numerosPoltronas;
+    private TelaReserva telaReservaOrigem; 
+    private JFrame telaUsuarioOrigem; // Esta variável já está presente, mas é crucial para o fluxo.
+
+    private HashMap<String, Double> valoresIngressoPorArea;
+
+    public TelaCompra(String peca, String sessao, String area, List<Integer> poltronas, TelaReserva telaReserva, JFrame telaUsuario) {
+        this.nomePeca = peca;
+        this.nomeSessao = sessao;
+        this.nomeArea = area;
+        this.numerosPoltronas = poltronas;
+        this.telaReservaOrigem = telaReserva;
+        this.telaUsuarioOrigem = telaUsuario;
+
+        inicializarValoresDosIngressosPorArea();
+
+        janelaPrincipal = new JFrame("Teatro ABC - Finalizar Compra");
+        janelaPrincipal.setSize(500, 550);
+        janelaPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        janelaPrincipal.setLocationRelativeTo(null);
+        janelaPrincipal.setResizable(false);
+
+        JPanel painelConteudo = new JPanel(null); 
+        painelConteudo.setBackground(new Color(245, 245, 245));
+
+        JLabel tituloPagina = new JLabel("Finalizar Compra");
+        tituloPagina.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        tituloPagina.setForeground(new Color(60, 63, 65));
+        tituloPagina.setBounds(50, 30, 300, 40);
+        painelConteudo.add(tituloPagina);
+
+        JLabel rotuloPeca = new JLabel("Peça:");
+        rotuloPeca.setBounds(50, 100, 100, 30);
+        painelConteudo.add(rotuloPeca);
+        JLabel valorPeca = new JLabel(nomePeca);
+        valorPeca.setBounds(160, 100, 200, 30);
+        painelConteudo.add(valorPeca);
+
+        JLabel rotuloSessao = new JLabel("Sessão:");
+        rotuloSessao.setBounds(50, 130, 100, 30);
+        painelConteudo.add(rotuloSessao);
+        JLabel valorSessao = new JLabel(nomeSessao);
+        valorSessao.setBounds(160, 130, 200, 30);
+        painelConteudo.add(valorSessao);
+
+        JLabel rotuloArea = new JLabel("Área:");
+        rotuloArea.setBounds(50, 160, 100, 30);
+        painelConteudo.add(rotuloArea);
+        JLabel valorArea = new JLabel(nomeArea);
+        valorArea.setBounds(160, 160, 200, 30);
+        painelConteudo.add(valorArea);
+
+        JLabel rotuloPoltronas = new JLabel("Poltrona(s):");
+        rotuloPoltronas.setBounds(50, 190, 100, 30);
+        painelConteudo.add(rotuloPoltronas);
+
+        StringBuilder poltronasFormatadas = new StringBuilder();
+        for (int i = 0; i < numerosPoltronas.size(); i++) {
+            poltronasFormatadas.append(numerosPoltronas.get(i));
+            if (i < numerosPoltronas.size() - 1) {
+                poltronasFormatadas.append(", ");
+            }
+        }
+        JLabel valorPoltronas = new JLabel(poltronasFormatadas.toString());
+        valorPoltronas.setBounds(160, 190, 300, 30);
+        painelConteudo.add(valorPoltronas);
+
+        JLabel rotuloValorTotal = new JLabel("Valor Total:");
+        rotuloValorTotal.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        rotuloValorTotal.setBounds(50, 230, 120, 30);
+        painelConteudo.add(rotuloValorTotal);
+
+        double valorTotalDaCompra = calcularValorTotalDaCompra();
+        JLabel valorTotalDisplay = new JLabel(String.format("R$ %.2f", valorTotalDaCompra));
+        valorTotalDisplay.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        valorTotalDisplay.setForeground(new Color(33, 150, 243));
+        valorTotalDisplay.setBounds(180, 230, 200, 30);
+        painelConteudo.add(valorTotalDisplay);
+
+        JButton botaoConfirmar = new JButton("Confirmar Compra");
+        aplicarEstiloBotao(botaoConfirmar, new Color(76, 175, 80)); // Verde
+        botaoConfirmar.setBounds(50, 280, 180, 40);
+        painelConteudo.add(botaoConfirmar);
+
+        JButton botaoVoltar = new JButton("Voltar");
+        aplicarEstiloBotao(botaoVoltar, new Color(244, 67, 54)); // Vermelho
+        botaoVoltar.setBounds(250, 280, 150, 40);
+        painelConteudo.add(botaoVoltar);
+
+        // AQUI: Modificação do Listener do botão Confirmar Compra
+        botaoConfirmar.addActionListener(e -> {
+            for (int poltrona : numerosPoltronas) {
+                telaReservaOrigem.marcarPoltronaComoOcupada(nomePeca, nomeSessao, nomeArea, poltrona);
+            }
+            JOptionPane.showMessageDialog(janelaPrincipal, "Compra finalizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            
+            janelaPrincipal.dispose(); // Fecha a TelaCompra
+            telaReservaOrigem.getJanelaPrincipal().dispose(); // Fecha a TelaReserva
+            
+            // AQUI: Torna a TelaUsuario visível novamente após a compra
+            if (telaUsuarioOrigem != null) {
+                telaUsuarioOrigem.setVisible(true); 
+            }
+        });
+
+        // O Listener para o botão de voltar permanece voltando para TelaReserva
+        botaoVoltar.addActionListener(e -> {
+            janelaPrincipal.dispose(); // Fecha a TelaCompra.
+            telaReservaOrigem.getJanelaPrincipal().setVisible(true); // Torna a TelaReserva visível novamente.
+        });
+
+        janelaPrincipal.add(painelConteudo);
+        janelaPrincipal.setVisible(true);
+    }
+
+    private void inicializarValoresDosIngressosPorArea() {
+        valoresIngressoPorArea = new HashMap<>();
+        valoresIngressoPorArea.put("Plateia A", 40.00);
+        valoresIngressoPorArea.put("Plateia B", 60.00);
+        valoresIngressoPorArea.put("Frisa", 120.00); 
+        valoresIngressoPorArea.put("Camarote", 80.00);
+        valoresIngressoPorArea.put("Balcão Nobre", 250.00);
+    }
+
+    private double calcularValorDoIngresso(String area) {
+        String areaBase = area;
+        if (area.startsWith("Frisa")) {
+            areaBase = "Frisa";
+        } else if (area.startsWith("Camarote")) {
+            areaBase = "Camarote";
+        }
+        return valoresIngressoPorArea.getOrDefault(areaBase, 0.00);
+    }
+
+    private double calcularValorTotalDaCompra() {
+        double total = 0.0;
+        for (int poltrona : numerosPoltronas) {
+            total += calcularValorDoIngresso(nomeArea);
+        }
+        return total;
+    }
+
+    private void aplicarEstiloBotao(JButton botao, Color cor) {
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botao.setBackground(cor);
+        botao.setForeground(Color.WHITE);
+        botao.setFocusPainted(false);
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botao.setPreferredSize(new Dimension(150, 40));
+    }
 }
