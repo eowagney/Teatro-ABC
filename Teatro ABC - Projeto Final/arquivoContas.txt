@@ -1,2 +1,0 @@
-NOME   -   CPF   -  TELEFONE   -   ENDEREÇO   -   DATA DE NASCIMENTO 
-wagner - 70786469161 - 62992142720 - ruamarioquintana - 11032003

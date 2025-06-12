@@ -18,11 +18,11 @@ public class TelaReserva {
     private HashMap<String, HashMap<String, HashMap<String, HashMap<Integer, Boolean>>>> estadoOcupacaoPoltronas;
     private HashMap<String, Integer> capacidadeMaximaPorArea;
     
-    // VARIÁVEL ADICIONADA PARA ARMAZENAR A TELA DE USUÁRIO DE ORIGEM
     private JFrame telaUsuarioOrigem; 
     
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public TelaReserva(JFrame telaUsuario) {
-        this.telaUsuarioOrigem = telaUsuario; // AQUI: A referência da TelaUsuario é guardada
+        this.telaUsuarioOrigem = telaUsuario; 
         
         janelaPrincipal = new JFrame("Teatro ABC - Reservar Poltrona");
         janelaPrincipal.setSize(900, 700);
@@ -37,39 +37,47 @@ public class TelaReserva {
         capacidadeMaximaPorArea = new HashMap<>();
         configurarCapacidadesDasAreas();
 
-        ImageIcon imagemOriginal = new ImageIcon("C:\\Users\\CEL ENG E ENERGIA\\Desktop\\TesteDeClasses\\mapa.png");
-        Image imagemRedimensionada = imagemOriginal.getImage().getScaledInstance(600, 400, Image.SCALE_SMOOTH);
+        ImageIcon imagemOriginal = new ImageIcon("D:\\Projetos\\Teatro-ABC\\Teatro ABC - Projeto Final\\MapaTeatro.png");
+        Image imagemRedimensionada = imagemOriginal.getImage().getScaledInstance(900, 270, Image.SCALE_SMOOTH);
         ImageIcon imagemFinal = new ImageIcon(imagemRedimensionada);
         JLabel labelImagem = new JLabel(imagemFinal);
-        labelImagem.setBounds(200, 80, 510, 130);
+        labelImagem.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        labelImagem.setBounds(5, 35, 870, 270);
+        labelImagem.setHorizontalAlignment(SwingConstants.CENTER);
+        labelImagem.setVerticalAlignment(SwingConstants.CENTER);
+
         painelConteudo.add(labelImagem);
+        if (imagemOriginal.getIconWidth() == -1) {
+        System.err.println("Erro ao carregar a imagem!");
+}
+
 
         JLabel tituloPagina = new JLabel("Reservar Poltrona");
         tituloPagina.setFont(new Font("Segoe UI", Font.BOLD, 26));
         tituloPagina.setForeground(new Color(60, 63, 65));
-        tituloPagina.setBounds(20, 5, 300, 40);
+        tituloPagina.setBounds(350, 0, 300, 40);
         painelConteudo.add(tituloPagina);
 
         JLabel rotuloPeca = new JLabel("Peça:");
-        rotuloPeca.setBounds(50, 290, 100, 30);
+        rotuloPeca.setBounds(50, 290 + 40, 100, 30);
         painelConteudo.add(rotuloPeca);
 
         seletorPeca = new JComboBox<>(new String[]{"Peça 1", "Peça 2", "Peça 3"});
         seletorPeca.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        seletorPeca.setBounds(100, 290, 200, 30);
+        seletorPeca.setBounds(100, 330, 200, 30);
         painelConteudo.add(seletorPeca);
 
         JLabel rotuloSessao = new JLabel("Sessão:");
-        rotuloSessao.setBounds(320, 290, 100, 30);
+        rotuloSessao.setBounds(320, 330, 100, 30);
         painelConteudo.add(rotuloSessao);
 
         seletorSessao = new JComboBox<>(new String[]{"Manhã", "Tarde", "Noite"});
         seletorSessao.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        seletorSessao.setBounds(385, 290, 200, 30);
+        seletorSessao.setBounds(385, 330, 200, 30);
         painelConteudo.add(seletorSessao);
 
         JLabel rotuloArea = new JLabel("Área:");
-        rotuloArea.setBounds(610, 290, 100, 30);
+        rotuloArea.setBounds(610, 330, 100, 30);
         painelConteudo.add(rotuloArea);
 
         String[] opcoesAreas = {"Plateia A", "Plateia B", "Frisa 1", "Frisa 2", "Frisa 3","Frisa 4", "Frisa 5", "Frisa 6",
@@ -77,7 +85,7 @@ public class TelaReserva {
         seletorArea = new JComboBox<>(opcoesAreas);
         seletorArea.setMaximumRowCount(3);
         seletorArea.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        seletorArea.setBounds(650, 290, 200, 30);
+        seletorArea.setBounds(650, 330, 200, 30);
         painelConteudo.add(seletorArea);
 
         painelPoltronasBotoes = new JPanel(new GridLayout(7, 13, 5, 5));
@@ -105,6 +113,7 @@ public class TelaReserva {
 
         painelConteudo.add(painelBotoesAcao);
 
+        @SuppressWarnings("Convert2Lambda")
         ActionListener ouvinteSelecao = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,28 +136,25 @@ public class TelaReserva {
 
             List<Integer> poltronasSelecionadas = new ArrayList<>();
             for (Component componente : painelPoltronasBotoes.getComponents()) {
-                if (componente instanceof JButton) {
-                    JButton botaoPoltrona = (JButton) componente;
+                if (componente instanceof JButton botaoPoltrona) {
                     if (botaoPoltrona.getBackground().equals(Color.GREEN)) {
-                        poltronasSelecionadas.add(Integer.parseInt(botaoPoltrona.getText()));
+                        poltronasSelecionadas.add(Integer.valueOf(botaoPoltrona.getText()));
                     }
                 }
             }
 
             if (!poltronasSelecionadas.isEmpty()) {
                 janelaPrincipal.setVisible(false);
-                // AQUI: Passa a referência da TelaUsuario para a TelaCompra
                 new TelaCompra(nomePecaSelecionada, nomeSessaoSelecionada, nomeAreaSelecionada, poltronasSelecionadas, this, telaUsuarioOrigem);
             } else {
                 JOptionPane.showMessageDialog(janelaPrincipal, "Nenhuma poltrona selecionada para reserva.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        // AQUI: Modificação do ActionListener do botão Voltar
         botaoVoltar.addActionListener(e -> {
-            janelaPrincipal.dispose(); // Fecha a TelaReserva
+            janelaPrincipal.dispose();
             if (telaUsuarioOrigem != null) {
-                telaUsuarioOrigem.setVisible(true); // Torna a TelaUsuario visível novamente
+                telaUsuarioOrigem.setVisible(true);
             }
         });
 

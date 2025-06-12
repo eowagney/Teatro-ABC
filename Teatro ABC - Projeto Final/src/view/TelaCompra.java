@@ -146,7 +146,8 @@ public class TelaCompra {
 
     private double calcularValorTotalDaCompra() {
         double total = 0.0;
-        for (int poltrona : numerosPoltronas) {
+        for (@SuppressWarnings("unused")
+        int poltrona : numerosPoltronas) {
             total += calcularValorDoIngresso(nomeArea);
         }
         return total;
