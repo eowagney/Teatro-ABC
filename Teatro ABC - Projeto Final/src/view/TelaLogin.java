@@ -1,11 +1,11 @@
 package view;
 
 import controller.UsuarioController;
-import objetos.NotificacaoUtil;
-
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
+import objetos.NotificacaoUtil;
+import objetos.SessaoLogin;
 
 public class TelaLogin extends JFrame {
 
@@ -88,9 +88,9 @@ public class TelaLogin extends JFrame {
 
         mostrarSenha.addActionListener(e -> {
             if (mostrarSenha.isSelected()) {
-                campoSenha.setEchoChar((char) 0); // Mostrar a senha
+                campoSenha.setEchoChar((char) 0); 
             } else {
-                campoSenha.setEchoChar('\u2022'); // Ocultar a senha (padrão: bullet •)
+                campoSenha.setEchoChar('\u2022'); 
             }
         });
 
@@ -102,6 +102,7 @@ public class TelaLogin extends JFrame {
             
             if (usuarioController.autenticar(usuario, senha)) {
                 NotificacaoUtil.mostrarAvisoTemporario(this, "Logado com sucesso!", new Color(0, 128, 0));
+                SessaoLogin.setLogin(usuario);
                 Timer timer = new Timer(1000, e2 -> {
                     TelaUsuario telaUsuario = new TelaUsuario(usuario);
                     TelaLogin.this.dispose();

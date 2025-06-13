@@ -1,14 +1,13 @@
 package view;
 
+import dao.ReservaDAO;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
 
-import dao.ReservaDAO;
 
 public class TelaReserva {
 
@@ -201,8 +200,8 @@ public class TelaReserva {
         numeracaoPoltronasPorArea.put("Frisa 5", criarIntervalo(146, 150));
         numeracaoPoltronasPorArea.put("Frisa 6", criarIntervalo(151, 155));
         numeracaoPoltronasPorArea.put("Camarote 1", criarIntervalo(156, 165));
-        numeracaoPoltronasPorArea.put("Camarote 2", criarIntervalo(166, 175));
-        numeracaoPoltronasPorArea.put("Camarote 3", criarIntervalo(176, 185));
+        numeracaoPoltronasPorArea.put("Camarote 2", criarIntervalo(176, 185));
+        numeracaoPoltronasPorArea.put("Camarote 3", criarIntervalo(166, 175));
         numeracaoPoltronasPorArea.put("Camarote 4", criarIntervalo(186, 195));
         numeracaoPoltronasPorArea.put("Camarote 5", criarIntervalo(196, 205));
         numeracaoPoltronasPorArea.put("Balcão Nobre", criarIntervalo(206, 255));

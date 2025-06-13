@@ -7,8 +7,9 @@ public class Usuario {
     private int id_endereco;
     private String nascimento;
     private String endereco;
-    private String login;
+    public String login;
     private String senha;
+    public Object getLogin;
 
     public String getCpf() {
         return cpf;

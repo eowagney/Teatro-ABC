@@ -1,7 +1,9 @@
 package view;
+
 import dao.ComprovanteDAO;
-import dao.UsuarioDAO;
-import entity.ComprovanteCompra;
+import dao.UsuarioCpfDAO;
+import entity.Usuario;
+import objetos.SessaoLogin;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class TelaCompra {
     private List<Integer> numerosPoltronas;
     private TelaReserva telaReservaOrigem; 
     private JFrame telaUsuarioOrigem; 
+
 
     private HashMap<String, Double> valoresIngressoPorArea;
 
@@ -94,24 +97,37 @@ public class TelaCompra {
         painelConteudo.add(valorTotalDisplay);
 
         JButton botaoConfirmar = new JButton("Confirmar Compra");
-        aplicarEstiloBotao(botaoConfirmar, new Color(76, 175, 80)); 
+        aplicarEstiloBotao(botaoConfirmar, new Color(76, 175, 80));
         botaoConfirmar.setBounds(50, 280, 180, 40);
         painelConteudo.add(botaoConfirmar);
 
         JButton botaoVoltar = new JButton("Voltar");
-        aplicarEstiloBotao(botaoVoltar, new Color(76, 175, 80)); 
+        aplicarEstiloBotao(botaoVoltar, new Color(244, 67, 54));
         botaoVoltar.setBounds(250, 280, 150, 40);
         painelConteudo.add(botaoVoltar);
 
         botaoConfirmar.addActionListener(e -> {
-            
+            SessaoLogin sessaoLogin = new SessaoLogin();
+            String login = sessaoLogin.getLogin();
+            UsuarioCpfDAO usuarioCpfDAO = new UsuarioCpfDAO();
+            String cpf = usuarioCpfDAO.buscarCpfPorLogin(login);
 
-});
+            ComprovanteDAO comprovanteDAO = new ComprovanteDAO();
+            comprovanteDAO.salvarComprovante(
+                cpf,
+                nomePeca,
+                nomeSessao,
+                nomeArea,
+                poltronasFormatadas.toString(),
+                valorTotalDaCompra
+            );
 
+         });
+        
 
         botaoVoltar.addActionListener(e -> {
             janelaPrincipal.dispose(); 
-            telaReservaOrigem.getJanelaPrincipal().setVisible(true); 
+            telaReservaOrigem.getJanelaPrincipal().setVisible(true);
         });
 
         janelaPrincipal.add(painelConteudo);
@@ -139,8 +155,7 @@ public class TelaCompra {
 
     private double calcularValorTotalDaCompra() {
         double total = 0.0;
-        for (@SuppressWarnings("unused")
-        int poltrona : numerosPoltronas) {
+        for (int poltrona : numerosPoltronas) {
             total += calcularValorDoIngresso(nomeArea);
         }
         return total;
