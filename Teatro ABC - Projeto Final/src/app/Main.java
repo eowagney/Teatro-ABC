@@ -1,7 +1,8 @@
 package app;
 
-import conexao.Conexao;
 import java.sql.Connection;
+
+import conexao.Conexao;
 import view.TelaLogin;
 
 public class Main {

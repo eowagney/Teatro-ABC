@@ -1,6 +1,8 @@
 package view;
 
 import controller.UsuarioController;
+import objetos.NotificacaoUtil;
+
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
@@ -99,9 +101,14 @@ public class TelaLogin extends JFrame {
             UsuarioController usuarioController = new UsuarioController();
             
             if (usuarioController.autenticar(usuario, senha)) {
-                TelaUsuario telaUsuario = new TelaUsuario(usuario);
-                TelaLogin.this.dispose();
-                telaUsuario.setVisible(true);
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Logado com sucesso!", new Color(0, 128, 0));
+                Timer timer = new Timer(1000, e2 -> {
+                    TelaUsuario telaUsuario = new TelaUsuario(usuario);
+                    TelaLogin.this.dispose();
+                    telaUsuario.setVisible(true);
+                });
+                timer.setRepeats(false); 
+                timer.start();              
             }else if(usuario.equals("admin") && senha.equals("admin")) {
                 TelaAdmin telaAdmin = new TelaAdmin();
                telaAdmin.setVisible(true);

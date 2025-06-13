@@ -1,50 +1,42 @@
 package dao;
 
-import conexao.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import conexao.Conexao;
 
 public class UsuarioDAO {
 
-   public boolean  cadastrarUsuario(String nome, String cpf, String telefone, String endereco, String nascimento, String login, String senha) {
-      String sql = "INSERT INTO usuarios (nome, cpf, telefone, endereco, nascimento, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public boolean cadastrarUsuario(String nome, String cpf, String telefone, int id_endereco, String nascimento, String endereco, String login, String senha) {
+        String sql = "INSERT INTO usuarios (nome, cpf, telefone, id_endereco, nascimento, endereco, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-      try {
-      PreparedStatement ps = null;
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
 
-      String dataStr = nascimento;
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
+            Date data = formatoEntrada.parse(nascimento);
+            java.sql.Date dataSql = new java.sql.Date(data.getTime());
 
-                SimpleDateFormat formatoEntrada = new SimpleDateFormat("dd/MM/yyyy");
-                Date data = null;
-                try {
-                    data = formatoEntrada.parse(dataStr);
-                } catch (ParseException e1) {
-                    System.err.println("Erro ao converter a data: " + e1.getMessage());
-                }
+            ps.setString(1, nome);
+            ps.setString(2, cpf);
+            ps.setString(3, telefone);
+            ps.setInt(4, id_endereco);
+            ps.setDate(5, dataSql);
+            ps.setString(6, endereco);
+            ps.setString(7, login);
+            ps.setString(8, senha);
 
-                java.sql.Date dataSql = new java.sql.Date(data.getTime());
-      
-         ps = Conexao.getConexao().prepareStatement(sql);
-         ps.setString(1, nome);
-         ps.setString(2, cpf);      
-         ps.setString(3, telefone);
-         ps.setString(4, endereco);
-         ps.setDate(5, dataSql);
-         ps.setString(6, login);
-         ps.setString(7, senha);
+            int linhasAfetadas = ps.executeUpdate();
+            return linhasAfetadas > 0;
 
-         ps.execute();
-         ps.close();
-         System.out.println("Usuário cadastrado com sucesso!");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar usuário: " + e.getMessage());
+        } catch (ParseException e) {
+            System.out.println("Erro ao converter data de nascimento: " + e.getMessage());
+        }
 
-      } catch (SQLException e) {
-         System.out.println("Erro ao cadastrar usuário: " + e.getMessage());
-      }
-      return false;
-        
+        return false;
     }
-
-   }
+}
+// 

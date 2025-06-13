@@ -1,4 +1,4 @@
-package Validadores;
+package validadores;
 
 import Interfaces.CriarValidador;
 

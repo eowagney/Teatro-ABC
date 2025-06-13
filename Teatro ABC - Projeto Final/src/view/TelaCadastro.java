@@ -1,18 +1,21 @@
 package view;
 
-import Validadores.ValidarCpf;
-import Validadores.ValidarEndereco;
-import Validadores.ValidarNascimento;
-import Validadores.ValidarNome;
-import Validadores.ValidarSenha;
-import Validadores.ValidarTelefone;
-import Validadores.ValidarUsuario;
+import dao.EnderecoDAO;
 import dao.UsuarioDAO;
 import entity.Usuario;
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+import objetos.NotificacaoUtil;
+import validadores.AutenticarCpf;
+import validadores.ValidarCpf;
+import validadores.ValidarEndereco;
+import validadores.ValidarNascimento;
+import validadores.ValidarNome;
+import validadores.ValidarSenha;
+import validadores.ValidarTelefone;
+import validadores.ValidarUsuario;
 
 public class TelaCadastro extends JFrame {
 
@@ -68,11 +71,53 @@ public class TelaCadastro extends JFrame {
         painel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel painelEndereco = criarPainelCampo("Endereço: ");
-        JTextField campoEndereco = new JTextField();
-        configurarCampoTexto(campoEndereco);
-        painelEndereco.add(campoEndereco);
+
+        JPanel painelEnderecoCampos = new JPanel();
+        painelEnderecoCampos.setLayout(new GridLayout(2, 3, 10, 5));
+
+        JTextField campoRua = new JTextField();
+        configurarCampoTexto(campoRua);
+        campoRua.setToolTipText("Digite o nome da rua");
+
+        JTextField campoNumero = new JTextField();
+        configurarCampoTexto(campoNumero);
+        campoNumero.setToolTipText("Digite o número");
+
+        JTextField campoBairro = new JTextField();
+        configurarCampoTexto(campoBairro);
+        campoBairro.setToolTipText("Digite o bairro");
+
+        JTextField campoCidade = new JTextField();
+        configurarCampoTexto(campoCidade);
+        campoCidade.setToolTipText("Digite a cidade");
+
+        JTextField campoEstado = new JTextField();
+        configurarCampoTexto(campoEstado);
+        campoEstado.setToolTipText("Digite a sigla do estado (ex: SP, RJ)");
+
+        painelEnderecoCampos.add(new JLabel("Rua:"));
+        painelEnderecoCampos.add(new JLabel("Número:"));
+        painelEnderecoCampos.add(new JLabel("Bairro:"));
+        painelEnderecoCampos.add(new JLabel("Cidade:"));
+        painelEnderecoCampos.add(new JLabel("Estado:"));
+        painelEnderecoCampos.add(new JLabel(""));
+
+        painelEnderecoCampos.add(campoRua);
+        painelEnderecoCampos.add(campoNumero);
+        painelEnderecoCampos.add(campoBairro);
+        painelEnderecoCampos.add(campoCidade);
+        painelEnderecoCampos.add(campoEstado);
+
+        painelEndereco.add(painelEnderecoCampos);
+
         painel.add(painelEndereco);
         painel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        String enderecoCompleto = campoRua.getText().trim() + ", " +
+                          campoNumero.getText().trim() + " - " +
+                          campoBairro.getText().trim() + " - " +
+                          campoCidade.getText().trim() + " - " +
+                          campoEstado.getText().trim();
 
         JPanel painelNascimento = criarPainelCampo("Data de Nascimento: ");
         MaskFormatter nascimentoMask = new MaskFormatter("##/##/####");
@@ -121,7 +166,7 @@ public class TelaCadastro extends JFrame {
 
         JPanel painelBotoes = new JPanel();
         painelBotoes.setBackground(new Color(245, 245, 245));
-        painelBotoes.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        painelBotoes.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         painelBotoes.add(botaoCadastrar);
         painelBotoes.add(botaoVoltar);
 
@@ -137,42 +182,61 @@ public class TelaCadastro extends JFrame {
             char[] senha = campoSenha.getPassword();
             String senhaStr = new String(senha);
             ValidarSenha vsSenha = new ValidarSenha();
+            AutenticarCpf autenticarCpf = new AutenticarCpf();
 
             if (!vNome.validar(campoNome.getText())) {
-                JOptionPane.showMessageDialog(this, "Nome inválido. Por favor, corrija.");
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Nome inválido. Por favor, corrija.", new Color(211, 47, 47));
                 campoNome.setText("");
                 campoNome.requestFocus();
             } else if (!vCpf.validar(campoCPF.getText())) {
-                JOptionPane.showMessageDialog(this, "CPF inválido. Por favor, corrija.");
+                NotificacaoUtil.mostrarAvisoTemporario(this, "CPF inválido. Por favor, corrija.", new Color(211, 47, 47));
                 campoCPF.setText("");
                 campoCPF.requestFocus();
-            } else if (!vTelefone.validar(campoTelefone.getText())) {
-                JOptionPane.showMessageDialog(this, "Telefone inválido. Por favor, corrija.");
+            } else if (autenticarCpf.cpfExiste(campoCPF.getText())) {
+                NotificacaoUtil.mostrarAvisoTemporario(this, "CPF já cadastrado. Por favor, utilize outro.", new Color(211, 47, 47));
+                campoCPF.setText("");
+                campoCPF.requestFocus();
+                
+            }else if (!vTelefone.validar(campoTelefone.getText())) {
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Telefone inválido. Por favor, corrija.", new Color(211, 47, 47));
                 campoTelefone.setText("");
                 campoTelefone.requestFocus();
-            } else if (!vEndereco.validar(campoEndereco.getText())) {
-                JOptionPane.showMessageDialog(this, "Endereço inválido. Por favor, corrija.");
-                campoEndereco.setText("");
-                campoEndereco.requestFocus();
+            } else if (!vEndereco.validar(enderecoCompleto)) {
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Endereço inválido. Por favor, corrija.", new Color(211, 47, 47));
+                campoRua.setText("");
+                campoNumero.setText("");    
+                campoBairro.setText("");
+                campoCidade.setText("");
+                campoEstado.setText("");
             } else if (!vNascimento.validar(campoNascimento.getText())) {
-                JOptionPane.showMessageDialog(this, "Data de nascimento inválida. Por favor, corrija.");
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Data de nascimento inválida. Por favor, corrija.", new Color(211, 47, 47));
                 campoNascimento.setText("");
                 campoNascimento.requestFocus();
             } else if (!vUsuario.validar(campoUsuario.getText())) {
-                JOptionPane.showMessageDialog(this, "Usuário inválido. Por favor, corrija.");
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Usuário inválido. Por favor, corrija.", new Color(211, 47, 47));
                 campoUsuario.setText("");
                 campoUsuario.requestFocus();
             } else if (!vsSenha.validar(senhaStr)) {
-                JOptionPane.showMessageDialog(this, "Senha inválida. Por favor, corrija.");
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Senha inválida. Por favor, corrija.", new Color(211, 47, 47));
                 campoSenha.setText("");
                 campoSenha.requestFocus();
             } else {
+                EnderecoDAO enderecoDAO = new EnderecoDAO();
+                int idEndereco = enderecoDAO.cadastrarEndereco(
+                    new JLabel(campoRua.getText().trim()),
+                    new JLabel(campoNumero.getText().trim()),
+                    new JLabel(campoBairro.getText().trim()),
+                    new JLabel(campoCidade.getText().trim()),
+                    new JLabel(campoEstado.getText().trim())
+                );
+
                 Usuario u = new Usuario();
                 u.setNome(campoNome.getText());
                 u.setCpf(campoCPF.getText());
                 u.setTelefone(campoTelefone.getText());
-                u.setEndereco(campoEndereco.getText());
+                u.setId_endereco(idEndereco);
                 u.setNascimento(campoNascimento.getText());
+                u.setEndereco(enderecoCompleto);
                 u.setLogin(campoUsuario.getText());
                 u.setSenha(senhaStr);
 
@@ -180,21 +244,26 @@ public class TelaCadastro extends JFrame {
                     u.getNome(),
                     u.getCpf(),
                     u.getTelefone(),
-                    u.getEndereco(),
+                    u.getId_endereco(),
                     u.getNascimento(),
+                    u.getEndereco(),
                     u.getLogin(),
                     u.getSenha()
                 );
 
                 if (sucesso) {
-                    this.dispose(); 
-
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Usuário cadastrado com sucesso!", new Color(0, 128, 0));
+                Timer timer = new Timer(1000, e2 -> {
+                    this.dispose();
                     new TelaLogin().setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Erro: CPF já cadastrado.", "Cadastro falhou", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+                });
+                timer.setRepeats(false); 
+                timer.start();
+                }       else {
+                         NotificacaoUtil.mostrarAvisoTemporario(this, "Falha no cadastro", new Color(211, 47, 47));
+                            }
+                        }
+                    });
 
         botaoVoltar.addActionListener(e -> {
             TelaLogin loginTela = new TelaLogin();

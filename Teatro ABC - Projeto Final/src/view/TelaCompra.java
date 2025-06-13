@@ -1,4 +1,8 @@
 package view;
+import dao.ComprovanteDAO;
+import dao.UsuarioDAO;
+import entity.ComprovanteCompra;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +16,7 @@ public class TelaCompra {
     private String nomeArea;
     private List<Integer> numerosPoltronas;
     private TelaReserva telaReservaOrigem; 
-    private JFrame telaUsuarioOrigem; // Esta variável já está presente, mas é crucial para o fluxo.
+    private JFrame telaUsuarioOrigem; 
 
     private HashMap<String, Double> valoresIngressoPorArea;
 
@@ -90,35 +94,24 @@ public class TelaCompra {
         painelConteudo.add(valorTotalDisplay);
 
         JButton botaoConfirmar = new JButton("Confirmar Compra");
-        aplicarEstiloBotao(botaoConfirmar, new Color(76, 175, 80)); // Verde
+        aplicarEstiloBotao(botaoConfirmar, new Color(76, 175, 80)); 
         botaoConfirmar.setBounds(50, 280, 180, 40);
         painelConteudo.add(botaoConfirmar);
 
         JButton botaoVoltar = new JButton("Voltar");
-        aplicarEstiloBotao(botaoVoltar, new Color(244, 67, 54)); // Vermelho
+        aplicarEstiloBotao(botaoVoltar, new Color(76, 175, 80)); 
         botaoVoltar.setBounds(250, 280, 150, 40);
         painelConteudo.add(botaoVoltar);
 
-        // AQUI: Modificação do Listener do botão Confirmar Compra
         botaoConfirmar.addActionListener(e -> {
-            for (int poltrona : numerosPoltronas) {
-                telaReservaOrigem.marcarPoltronaComoOcupada(nomePeca, nomeSessao, nomeArea, poltrona);
-            }
-            JOptionPane.showMessageDialog(janelaPrincipal, "Compra finalizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            janelaPrincipal.dispose(); // Fecha a TelaCompra
-            telaReservaOrigem.getJanelaPrincipal().dispose(); // Fecha a TelaReserva
-            
-            // AQUI: Torna a TelaUsuario visível novamente após a compra
-            if (telaUsuarioOrigem != null) {
-                telaUsuarioOrigem.setVisible(true); 
-            }
-        });
 
-        // O Listener para o botão de voltar permanece voltando para TelaReserva
+});
+
+
         botaoVoltar.addActionListener(e -> {
-            janelaPrincipal.dispose(); // Fecha a TelaCompra.
-            telaReservaOrigem.getJanelaPrincipal().setVisible(true); // Torna a TelaReserva visível novamente.
+            janelaPrincipal.dispose(); 
+            telaReservaOrigem.getJanelaPrincipal().setVisible(true); 
         });
 
         janelaPrincipal.add(painelConteudo);
