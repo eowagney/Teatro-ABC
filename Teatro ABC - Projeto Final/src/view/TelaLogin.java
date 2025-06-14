@@ -111,9 +111,14 @@ public class TelaLogin extends JFrame {
                 timer.setRepeats(false); 
                 timer.start();              
             }else if(usuario.equals("admin") && senha.equals("admin")) {
+                NotificacaoUtil.mostrarAvisoTemporario(this, "Logado com sucesso!", new Color(0, 128, 0));
+                Timer timer = new Timer(1000, e2 -> {
                 TelaAdmin telaAdmin = new TelaAdmin();
                telaAdmin.setVisible(true);
                 TelaLogin.this.dispose();
+                });
+                timer.setRepeats(false); 
+                timer.start(); 
             } else {
                 erroEntrar.setVisible(true);
             }

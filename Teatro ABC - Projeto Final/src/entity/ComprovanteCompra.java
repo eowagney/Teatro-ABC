@@ -4,11 +4,17 @@ import java.util.List;
 
 
 public class ComprovanteCompra {
+    @SuppressWarnings("FieldMayBeFinal")
     private String cpf;
+    @SuppressWarnings("FieldMayBeFinal")
     private String peca;
+    @SuppressWarnings("FieldMayBeFinal")
     private String sessao;
+    @SuppressWarnings("FieldMayBeFinal")
     private String area;
+    @SuppressWarnings("FieldMayBeFinal")
     private List<Integer> poltronas;
+    @SuppressWarnings("FieldMayBeFinal")
     private double valor;
 
     public ComprovanteCompra(String cpf, String peca, String sessao, String area, List<Integer> poltronas, double valor) {

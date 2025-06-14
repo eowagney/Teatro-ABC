@@ -3,6 +3,9 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+import dao.UsuarioCpfDAO;
+import objetos.SessaoLogin;
+
 public class TelaUsuario extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -62,9 +65,13 @@ public class TelaUsuario extends JFrame {
         });
 
         botaoImprimir.addActionListener(e -> {
-            TelaLogin telaLogin = new TelaLogin();
-            telaLogin.setVisible(true);
-            dispose();
+            SessaoLogin sessaoLogin = new SessaoLogin();
+            String login = SessaoLogin.getLogin();
+            UsuarioCpfDAO usuarioCpfDAO = new UsuarioCpfDAO();
+            String cpf = usuarioCpfDAO.buscarCpfPorLogin(login);
+
+            TelaComprovantes tela = new TelaComprovantes(cpf);
+
         });
 
         add(painel);

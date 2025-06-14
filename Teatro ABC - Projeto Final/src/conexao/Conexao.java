@@ -5,6 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexao {
+    @SuppressWarnings("unused")
+    private static final String URL = null;
+    @SuppressWarnings("unused")
+    private static final String USUARIO = null;
+    @SuppressWarnings("unused")
+    private static String SENHA;
+
     public static Connection getConexao() {
         Connection conn = null;
         try {
@@ -21,6 +28,15 @@ public class Conexao {
             System.out.println("Erro na conexão com o banco de dados.");
         }
         return conn;
+    }
+
+   public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL, USUARIO, SENHA);
+        } catch (SQLException e) {
+            System.err.println("Erro ao conectar com o banco de dados: " + e.getMessage());
+            throw new RuntimeException("Erro ao conectar com o banco de dados.", e);
+        }
     }
 
 }
