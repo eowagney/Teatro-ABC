@@ -7,6 +7,8 @@ public class TelaUsuario extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
+    @SuppressWarnings("unused")
+
     public TelaUsuario(String nomeUsuario) {
         setTitle("Teatro ABC - Usuário");
         setSize(800, 600);
@@ -40,7 +42,7 @@ public class TelaUsuario extends JFrame {
         JButton botaoVoltar = new JButton("Voltar");
         botaoVoltar.setPreferredSize(new Dimension(150, 35));
         botaoVoltar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        botaoVoltar.setBackground(new Color(33, 150, 243)); // Azul
+        botaoVoltar.setBackground(new Color(33, 150, 243));
         botaoVoltar.setForeground(Color.WHITE);
         botaoVoltar.setFocusPainted(false);
         botaoVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -54,8 +56,9 @@ public class TelaUsuario extends JFrame {
         });
         
         botaoComprar.addActionListener(e -> {
+            @SuppressWarnings("unused")
             TelaReserva telaReserva = new TelaReserva(TelaUsuario.this);
-            dispose();
+            setVisible(false);
         });
 
         botaoImprimir.addActionListener(e -> {

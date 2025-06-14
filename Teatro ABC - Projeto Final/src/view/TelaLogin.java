@@ -62,7 +62,7 @@ public class TelaLogin extends JFrame {
 
         JButton botaoLogin = new JButton("Entrar");
         botaoLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        botaoLogin.setBackground(new Color(33, 150, 243));
+        botaoLogin.setBackground(new Color(76, 175, 80));
         botaoLogin.setForeground(Color.WHITE);
         botaoLogin.setFocusPainted(false);
         botaoLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -72,7 +72,7 @@ public class TelaLogin extends JFrame {
 
         JButton botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        botaoCadastrar.setBackground(new Color(76, 175, 80));
+        botaoCadastrar.setBackground(new Color(33, 150, 243));
         botaoCadastrar.setForeground(Color.WHITE);
         botaoCadastrar.setFocusPainted(false);
         botaoCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));

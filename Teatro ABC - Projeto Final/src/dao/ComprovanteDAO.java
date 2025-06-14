@@ -20,6 +20,8 @@ public class ComprovanteDAO {
             stmt.setString(5, poltronas);
             stmt.setDouble(6, valor);
 
+            System.out.println("Salvo com sucesso! ");
+
             stmt.executeUpdate();
 
         } catch (SQLException e) {

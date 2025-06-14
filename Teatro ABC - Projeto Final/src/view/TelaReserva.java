@@ -11,18 +11,25 @@ import javax.swing.*;
 
 public class TelaReserva {
 
+    @SuppressWarnings("unused")
+
     private JComboBox<String> seletorPeca;
     private JComboBox<String> seletorSessao;
     private JComboBox<String> seletorArea;
     private JPanel painelPoltronasBotoes;
     private JFrame janelaPrincipal;
 
+    @SuppressWarnings("unused")
     private HashMap<String, HashMap<String, HashMap<String, HashMap<Integer, Boolean>>>> estadoOcupacaoPoltronas;
     private HashMap<String, Integer> capacidadeMaximaPorArea;
     private HashMap<String, List<Integer>> numeracaoPoltronasPorArea;
 
+    @SuppressWarnings("FieldMayBeFinal")
     private JFrame telaUsuarioOrigem;
+    @SuppressWarnings("unused")
+    private TelaCompra telaCompra;
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public TelaReserva(JFrame telaUsuario) {
         this.telaUsuarioOrigem = telaUsuario;
         inicializarJanela();
@@ -34,7 +41,7 @@ public class TelaReserva {
     private void inicializarJanela() {
         janelaPrincipal = new JFrame("Teatro ABC - Reservar Poltrona");
         janelaPrincipal.setSize(900, 700);
-        janelaPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        janelaPrincipal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         janelaPrincipal.setLocationRelativeTo(null);
         janelaPrincipal.setResizable(false);
     }
@@ -99,12 +106,12 @@ public class TelaReserva {
         painelBotoes.setBounds(200, 610, 500, 120);
 
         JButton botaoReservar = new JButton("Reservar Selecionadas");
-        aplicarEstiloBotao(botaoReservar, new Color(33, 150, 243));
+        aplicarEstiloBotao(botaoReservar, new Color(76, 175, 80));
         botaoReservar.setBounds(20, 2, 200, 40);
         painelBotoes.add(botaoReservar);
 
         JButton botaoVoltar = new JButton("Voltar");
-        aplicarEstiloBotao(botaoVoltar, new Color(76, 175, 80));
+        aplicarEstiloBotao(botaoVoltar, new Color(33, 150, 243));
         botaoVoltar.setBounds(250, 2, 200, 40);
         painelBotoes.add(botaoVoltar);
 
@@ -137,7 +144,7 @@ public class TelaReserva {
             JOptionPane.showMessageDialog(janelaPrincipal, "Nenhuma poltrona selecionada.", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             janelaPrincipal.setVisible(false);
-            new TelaCompra(peca, sessao, area, selecionadas, this, telaUsuarioOrigem);
+            telaCompra = new TelaCompra(peca, sessao, area, selecionadas, this, telaUsuarioOrigem);
         }
     }
 

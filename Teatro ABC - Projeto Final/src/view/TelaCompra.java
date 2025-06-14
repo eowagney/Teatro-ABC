@@ -2,7 +2,7 @@ package view;
 
 import dao.ComprovanteDAO;
 import dao.UsuarioCpfDAO;
-import entity.Usuario;
+import objetos.NotificacaoUtil;
 import objetos.SessaoLogin;
 
 import java.awt.*;
@@ -12,30 +12,35 @@ import javax.swing.*;
 
 public class TelaCompra {
 
+    @SuppressWarnings("unused")
+    private JFrame telaOrigem;
+
     private JFrame janelaPrincipal;
     private String nomePeca;
     private String nomeSessao;
     private String nomeArea;
+    @SuppressWarnings("FieldMayBeFinal")
     private List<Integer> numerosPoltronas;
     private TelaReserva telaReservaOrigem; 
+    @SuppressWarnings({"FieldMayBeFinal", "unused"})
     private JFrame telaUsuarioOrigem; 
 
 
     private HashMap<String, Double> valoresIngressoPorArea;
 
-    public TelaCompra(String peca, String sessao, String area, List<Integer> poltronas, TelaReserva telaReserva, JFrame telaUsuario) {
+    public TelaCompra(String peca, String sessao, String area, List<Integer> poltronas, TelaReserva telaReserva, JFrame telaOrigem) {
         this.nomePeca = peca;
         this.nomeSessao = sessao;
         this.nomeArea = area;
         this.numerosPoltronas = poltronas;
         this.telaReservaOrigem = telaReserva;
-        this.telaUsuarioOrigem = telaUsuario;
+        this.telaUsuarioOrigem = telaOrigem;
 
         inicializarValoresDosIngressosPorArea();
 
         janelaPrincipal = new JFrame("Teatro ABC - Finalizar Compra");
         janelaPrincipal.setSize(500, 550);
-        janelaPrincipal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        janelaPrincipal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         janelaPrincipal.setLocationRelativeTo(null);
         janelaPrincipal.setResizable(false);
 
@@ -102,13 +107,14 @@ public class TelaCompra {
         painelConteudo.add(botaoConfirmar);
 
         JButton botaoVoltar = new JButton("Voltar");
-        aplicarEstiloBotao(botaoVoltar, new Color(244, 67, 54));
+        aplicarEstiloBotao(botaoVoltar, new Color(33, 150, 243));
         botaoVoltar.setBounds(250, 280, 150, 40);
         painelConteudo.add(botaoVoltar);
 
         botaoConfirmar.addActionListener(e -> {
+            @SuppressWarnings("unused")
             SessaoLogin sessaoLogin = new SessaoLogin();
-            String login = sessaoLogin.getLogin();
+            String login = SessaoLogin.getLogin();
             UsuarioCpfDAO usuarioCpfDAO = new UsuarioCpfDAO();
             String cpf = usuarioCpfDAO.buscarCpfPorLogin(login);
 
@@ -121,7 +127,15 @@ public class TelaCompra {
                 poltronasFormatadas.toString(),
                 valorTotalDaCompra
             );
+            NotificacaoUtil.mostrarAvisoTemporario(janelaPrincipal, "Compra realizada com sucesso!", new Color(0, 128, 0));
 
+            Timer timer = new Timer(1000, e2 -> {
+                janelaPrincipal.dispose(); 
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
+            telaUsuarioOrigem.setVisible(true);
          });
         
 
@@ -155,7 +169,8 @@ public class TelaCompra {
 
     private double calcularValorTotalDaCompra() {
         double total = 0.0;
-        for (int poltrona : numerosPoltronas) {
+        for (@SuppressWarnings("unused")
+        int poltrona : numerosPoltronas) {
             total += calcularValorDoIngresso(nomeArea);
         }
         return total;

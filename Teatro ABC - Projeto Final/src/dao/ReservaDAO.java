@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ReservaDAO {
 
+    @SuppressWarnings("UnnecessaryTemporaryOnConversionFromString")
     public List<Integer> buscarPoltronasReservadas(String peca, String sessao, String area) {
         List<Integer> poltronasReservadas = new ArrayList<>();
         String sql = "SELECT poltronas FROM comprovantes_compra WHERE peca = ? AND sessao = ? AND area = ?";

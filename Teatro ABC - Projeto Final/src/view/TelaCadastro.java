@@ -159,10 +159,10 @@ public class TelaCadastro extends JFrame {
         });
 
         JButton botaoCadastrar = new JButton("Cadastrar");
-        configurarBotao(botaoCadastrar, new Color(33, 150, 243));
+        configurarBotao(botaoCadastrar, new Color(76, 175, 80));
 
         JButton botaoVoltar = new JButton("Voltar");
-        configurarBotao(botaoVoltar, new Color(76, 175, 80));
+        configurarBotao(botaoVoltar, new Color(33, 150, 243));
 
         JPanel painelBotoes = new JPanel();
         painelBotoes.setBackground(new Color(245, 245, 245));
