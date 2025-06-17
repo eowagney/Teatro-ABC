@@ -1,5 +1,6 @@
 package view;
 
+import controller.AutenticarCpfController;
 import dao.EnderecoDAO;
 import dao.UsuarioDAO;
 import entity.Usuario;
@@ -7,8 +8,6 @@ import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-
-import controller.AutenticarCpfController;
 import objetos.NotificacaoUtil;
 import validadores.ValidarCpf;
 import validadores.ValidarEndereco;
@@ -231,13 +230,19 @@ public class TelaCadastro extends JFrame {
                     new JLabel(campoEstado.getText().trim())
                 );
 
+                String enderecoAtualizado = campoRua.getText().trim() + ", " +
+                        campoNumero.getText().trim() + " - " +
+                        campoBairro.getText().trim() + " - " +
+                        campoCidade.getText().trim() + " - " +
+                        campoEstado.getText().trim();
+
                 Usuario u = new Usuario();
                 u.setNome(campoNome.getText());
                 u.setCpf(campoCPF.getText());
                 u.setTelefone(campoTelefone.getText());
                 u.setId_endereco(idEndereco);
                 u.setNascimento(campoNascimento.getText());
-                u.setEndereco(enderecoCompleto);
+                u.setEndereco(enderecoAtualizado);
                 u.setLogin(campoUsuario.getText());
                 u.setSenha(senhaStr);
 
