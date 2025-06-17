@@ -1,12 +1,14 @@
 package view;
 
-import dao.ReservaDAO;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
+
+import controller.ReservaController;
 
 
 public class TelaReserva {
@@ -117,7 +119,13 @@ public class TelaReserva {
 
         painel.add(painelBotoes);
 
-        botaoReservar.addActionListener(e -> reservarPoltronas());
+        botaoReservar.addActionListener(e -> {
+            try {
+                reservarPoltronas();
+            } catch (SQLException e1) {
+                System.err.println("Erro ao reservar poltronas: " + e1.getMessage());
+            }
+        });
         botaoVoltar.addActionListener(e -> voltarParaTelaUsuario());
     }
 
@@ -128,7 +136,7 @@ public class TelaReserva {
         seletorArea.addActionListener(ouvinteSelecao);
     }
 
-    private void reservarPoltronas() {
+    private void reservarPoltronas() throws SQLException {
         String peca = (String) seletorPeca.getSelectedItem();
         String sessao = (String) seletorSessao.getSelectedItem();
         String area = (String) seletorArea.getSelectedItem();
@@ -162,7 +170,7 @@ public class TelaReserva {
 
         if (peca == null || sessao == null || area == null) return;
 
-        ReservaDAO dao = new ReservaDAO();
+        ReservaController dao = new ReservaController();
         List<Integer> reservadas = dao.buscarPoltronasReservadas(peca, sessao, area);
         List<Integer> todas = numeracaoPoltronasPorArea.getOrDefault(area, new ArrayList<>());
 

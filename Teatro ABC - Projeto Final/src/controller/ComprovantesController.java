@@ -1,5 +1,7 @@
-package dao;
+package controller;
 
+import conexao.Conexao;
+import entity.Comprovante;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,10 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import conexao.Conexao;
-import entity.Comprovante;
-
-public class ComprovantesUsuarioDAO {
+public class ComprovantesController {
     private Connection conn;
 
     public void ComprovanteDAO() throws SQLException {
@@ -19,7 +18,8 @@ public class ComprovantesUsuarioDAO {
 
     public List<Comprovante> listarComprovantesPorCpf(String cpf) {
         List<Comprovante> lista = new ArrayList<>();
-        String sql = "SELECT * FROM comprovantes_compra WHERE cpf = ?";
+        String sql = "SELECT id FROM comprovantes_compra WHERE cpf = ? ORDER BY id DESC LIMIT 1";
+
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cpf);

@@ -1,14 +1,19 @@
 package view;
 
+import conexao.Conexao;
+import controller.BuscarCpfController;
+import controller.IdComprovantesController;
 import dao.ComprovanteDAO;
-import dao.UsuarioCpfDAO;
-import objetos.NotificacaoUtil;
-import objetos.SessaoLogin;
+import dao.PoltronaDAO;
+import entity.SessaoLogin;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
+import objetos.NotificacaoUtil;
 
 public class TelaCompra {
 
@@ -28,7 +33,7 @@ public class TelaCompra {
 
     private HashMap<String, Double> valoresIngressoPorArea;
 
-    public TelaCompra(String peca, String sessao, String area, List<Integer> poltronas, TelaReserva telaReserva, JFrame telaOrigem) {
+    public TelaCompra(String peca, String sessao, String area, List<Integer> poltronas, TelaReserva telaReserva, JFrame telaOrigem) throws SQLException {
         this.nomePeca = peca;
         this.nomeSessao = sessao;
         this.nomeArea = area;
@@ -115,7 +120,7 @@ public class TelaCompra {
             @SuppressWarnings("unused")
             SessaoLogin sessaoLogin = new SessaoLogin();
             String login = SessaoLogin.getLogin();
-            UsuarioCpfDAO usuarioCpfDAO = new UsuarioCpfDAO();
+            BuscarCpfController usuarioCpfDAO = new BuscarCpfController();
             String cpf = usuarioCpfDAO.buscarCpfPorLogin(login);
 
             ComprovanteDAO comprovanteDAO = new ComprovanteDAO();
@@ -127,6 +132,21 @@ public class TelaCompra {
                 poltronasFormatadas.toString(),
                 valorTotalDaCompra
             );
+
+             Connection conexao = Conexao.getConexao();  // pega conexão do banco
+            
+            IdComprovantesController dao = new IdComprovantesController(conexao);
+            Integer idComprovante = dao.buscarIdComprovantePorCpf(cpf);
+
+            if (idComprovante != null) {
+                PoltronaDAO daoPoltrona = new PoltronaDAO(conexao);
+                daoPoltrona.salvarPoltronas(idComprovante, numerosPoltronas);
+                System.out.println("Poltronas salvas com sucesso.");                
+            } else {
+                System.out.println("Comprovante não encontrado para o CPF: " + cpf);
+            }
+            
+
             NotificacaoUtil.mostrarAvisoTemporario(janelaPrincipal, "Compra realizada com sucesso!", new Color(0, 128, 0));
 
             Timer timer = new Timer(1000, e2 -> {

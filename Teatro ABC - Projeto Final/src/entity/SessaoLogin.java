@@ -1,4 +1,4 @@
-package objetos;
+package entity;
 
 
 public class SessaoLogin {

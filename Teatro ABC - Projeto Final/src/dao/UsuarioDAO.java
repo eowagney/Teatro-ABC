@@ -9,7 +9,7 @@ import conexao.Conexao;
 
 public class UsuarioDAO {
 
-    public boolean cadastrarUsuario(String nome, String cpf, String telefone, int id_endereco, String nascimento, String endereco, String login, String senha) {
+    public boolean salvarUsuario(String nome, String cpf, String telefone, int id_endereco, String nascimento, String endereco, String login, String senha) {
         String sql = "INSERT INTO usuarios (nome, cpf, telefone, id_endereco, nascimento, endereco, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {

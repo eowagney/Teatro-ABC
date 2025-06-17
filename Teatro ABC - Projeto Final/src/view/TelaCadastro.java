@@ -7,8 +7,9 @@ import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+
+import controller.AutenticarCpfController;
 import objetos.NotificacaoUtil;
-import validadores.AutenticarCpf;
 import validadores.ValidarCpf;
 import validadores.ValidarEndereco;
 import validadores.ValidarNascimento;
@@ -182,7 +183,7 @@ public class TelaCadastro extends JFrame {
             char[] senha = campoSenha.getPassword();
             String senhaStr = new String(senha);
             ValidarSenha vsSenha = new ValidarSenha();
-            AutenticarCpf autenticarCpf = new AutenticarCpf();
+            AutenticarCpfController autenticarCpf = new AutenticarCpfController();
 
             if (!vNome.validar(campoNome.getText())) {
                 NotificacaoUtil.mostrarAvisoTemporario(this, "Nome inválido. Por favor, corrija.", new Color(211, 47, 47));
@@ -222,7 +223,7 @@ public class TelaCadastro extends JFrame {
                 campoSenha.requestFocus();
             } else {
                 EnderecoDAO enderecoDAO = new EnderecoDAO();
-                int idEndereco = enderecoDAO.cadastrarEndereco(
+                int idEndereco = enderecoDAO.salvarEndereco(
                     new JLabel(campoRua.getText().trim()),
                     new JLabel(campoNumero.getText().trim()),
                     new JLabel(campoBairro.getText().trim()),
@@ -240,7 +241,7 @@ public class TelaCadastro extends JFrame {
                 u.setLogin(campoUsuario.getText());
                 u.setSenha(senhaStr);
 
-                boolean sucesso = new UsuarioDAO().cadastrarUsuario(
+                boolean sucesso = new UsuarioDAO().salvarUsuario(
                     u.getNome(),
                     u.getCpf(),
                     u.getTelefone(),

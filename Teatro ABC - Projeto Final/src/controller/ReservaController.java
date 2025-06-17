@@ -1,4 +1,4 @@
-package dao;
+package controller;
 
 import conexao.Conexao;
 
@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservaDAO {
+public class ReservaController {
 
     @SuppressWarnings("UnnecessaryTemporaryOnConversionFromString")
     public List<Integer> buscarPoltronasReservadas(String peca, String sessao, String area) {

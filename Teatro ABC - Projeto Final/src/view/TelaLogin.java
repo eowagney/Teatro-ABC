@@ -1,11 +1,12 @@
 package view;
 
 import controller.UsuarioController;
+import entity.SessaoLogin;
+
 import java.awt.*;
 import java.text.ParseException;
 import javax.swing.*;
 import objetos.NotificacaoUtil;
-import objetos.SessaoLogin;
 
 public class TelaLogin extends JFrame {
 

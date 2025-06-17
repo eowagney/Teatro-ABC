@@ -1,4 +1,4 @@
-package validadores;
+package controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import conexao.Conexao;
 
-public class AutenticarCpf {
+public class AutenticarCpfController {
     public boolean cpfExiste(String cpf) {
     String sql = "SELECT COUNT(*) FROM usuarios WHERE cpf = ?";
     try (Connection conn = Conexao.getConexao();

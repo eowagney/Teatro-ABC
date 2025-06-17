@@ -3,8 +3,8 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
-import dao.UsuarioCpfDAO;
-import objetos.SessaoLogin;
+import controller.BuscarCpfController;
+import entity.SessaoLogin;
 
 public class TelaUsuario extends JFrame {
 
@@ -67,7 +67,7 @@ public class TelaUsuario extends JFrame {
         botaoImprimir.addActionListener(e -> {
             SessaoLogin sessaoLogin = new SessaoLogin();
             String login = SessaoLogin.getLogin();
-            UsuarioCpfDAO usuarioCpfDAO = new UsuarioCpfDAO();
+            BuscarCpfController usuarioCpfDAO = new BuscarCpfController();
             String cpf = usuarioCpfDAO.buscarCpfPorLogin(login);
 
             TelaComprovantes tela = new TelaComprovantes(cpf);

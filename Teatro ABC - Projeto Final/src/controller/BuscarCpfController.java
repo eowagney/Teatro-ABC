@@ -1,4 +1,4 @@
-package dao;
+package controller;
 
 import conexao.Conexao;
 import java.sql.Connection;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UsuarioCpfDAO { 
+public class BuscarCpfController { 
     public String buscarCpfPorLogin(String login) {
         String cpf = null;
         String sql = "SELECT cpf FROM usuarios WHERE login = ?";

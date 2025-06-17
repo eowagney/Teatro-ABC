@@ -1,17 +1,16 @@
 package dao;
 
+import conexao.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JLabel;
 import java.sql.Statement;
-
-import conexao.Conexao;
+import javax.swing.JLabel;
 
 public class EnderecoDAO {
 
-    public int cadastrarEndereco(JLabel ruaLabel, JLabel numeroLabel, JLabel bairroLabel, JLabel cidadeLabel, JLabel estadoLabel) {
+    public int salvarEndereco(JLabel ruaLabel, JLabel numeroLabel, JLabel bairroLabel, JLabel cidadeLabel, JLabel estadoLabel) {
     String sql = "INSERT INTO endereco (rua, numero, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?)";
 
     try (Connection conn = Conexao.getConexao();
